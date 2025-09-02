@@ -32,4 +32,18 @@ public class LessonOneTest {
         System.out.println(answer);
 
     }
+
+    @Test
+    public void testRedirectAddress() {
+        Response response = RestAssured
+                .given()
+                .redirects()
+                .follow(false)
+                .get("https://playground.learnqa.ru/api/long_redirect")
+                .andReturn();
+
+
+        String answer = response.getHeader("Location");
+        System.out.println(answer);
+    }
 }
