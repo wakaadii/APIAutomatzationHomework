@@ -67,4 +67,49 @@ public class LessonOneTest {
         }
         System.out.println(countRedirects);
     }
+
+    @Test
+    public void testDelay() throws InterruptedException {
+        JsonPath response = RestAssured
+                .given()
+                .get("https://playground.learnqa.ru/ajax/api/longtime_job")
+                .jsonPath();
+
+        int delay = response.get("seconds");
+        String token = response.get("token");
+        JsonPath beforeTimer = RestAssured
+                .given()
+                .queryParam("token", token)
+                .get("https://playground.learnqa.ru/ajax/api/longtime_job")
+                .jsonPath();
+
+        String responceCode = beforeTimer.get("status");
+        if (responceCode.equals("Job is NOT ready")) {
+            System.out.println("До истечения таймера код корректен");
+        } else {
+            System.out.println("ошибка в статусе ответа до истечения таймера");
+            return;
+        }
+
+        Thread.sleep(delay*1000);
+
+        JsonPath afterTimer = RestAssured
+                .given()
+                .queryParam("token", token)
+                .get("https://playground.learnqa.ru/ajax/api/longtime_job")
+                .jsonPath();
+
+        responceCode = afterTimer.get("status");
+        String result = afterTimer.get("result");
+
+        if (responceCode.equals("Job is ready") & (result != null)) {
+            System.out.println("статус после истечения таймера " + responceCode + "\nзначение поля 'result' = " + result );
+        } else {
+            if (!responceCode.equals("Job is ready")) {
+                System.out.println("ошибка в статусе ответа до истечения таймера: " + responceCode);
+            } else {
+                System.out.println("Поле result не получено");
+            }
+        }
+    }
 }
