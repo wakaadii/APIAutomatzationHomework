@@ -1,6 +1,9 @@
 import io.restassured.RestAssured;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
+
+import java.util.*;
 
 public class LessonOneTest {
 
@@ -15,5 +18,18 @@ public class LessonOneTest {
                 .get("https://playground.learnqa.ru/api/get_text")
                 .andReturn();
         response.prettyPrint();
+    }
+
+    @Test
+    public void testGetTextSecondMessage() {
+        JsonPath response = RestAssured
+                .given()
+                .get("https://playground.learnqa.ru/api/get_json_homework")
+                .jsonPath();
+
+        List<Object> messages = response.get("messages");
+        Object answer = messages.get(1);
+        System.out.println(answer);
+
     }
 }
