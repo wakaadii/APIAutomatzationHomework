@@ -46,4 +46,25 @@ public class LessonOneTest {
         String answer = response.getHeader("Location");
         System.out.println(answer);
     }
+
+    @Test
+    public void testCountRedirects() {
+
+        int statusCode = 0;
+        int countRedirects = 0;
+        String redirectLink = "https://playground.learnqa.ru/api/long_redirect";
+
+        while (statusCode != 200) {
+            Response response = RestAssured
+                    .given()
+                    .redirects()
+                    .follow(false)
+                    .get(redirectLink)
+                    .andReturn();
+            statusCode = response.statusCode();
+            countRedirects = countRedirects + 1;
+            redirectLink = response.getHeader("Location");
+        }
+        System.out.println(countRedirects);
+    }
 }
