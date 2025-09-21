@@ -3,6 +3,7 @@ package tests;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import lib.ApiCoreRequests;
 import lib.BaseTestCase;
 import lib.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,16 +14,13 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.HashMap;
 import java.util.Map;
 
-import static lib.Assertions.assertResponseCodeEquals;
-import static lib.Assertions.assertResponseTextEquals;
-import static lib.DataGenerator.getRegistrationData;
-
 
 public class UserAuthTest extends BaseTestCase {
 
     String cookie;
     String header;
     int userIdOnAuth;
+    public final ApiCoreRequests apiCoreRequests = new ApiCoreRequests();
 
     @BeforeEach
     public void loginUser() {
@@ -44,14 +42,14 @@ public class UserAuthTest extends BaseTestCase {
     @Test
     public void testAuthUser (){
 
-        Response respohseCheckAuth = RestAssured
+        Response responseCheckAuth = RestAssured
                 .given()
                 .header("x-csrf-token", this.header)
                 .cookie("auth_sid", this.cookie)
                 .get("https://playground.learnqa.ru/api/user/auth")
                 .andReturn();
 
-        Assertions.assertJsonByName(respohseCheckAuth, "user_id", this.userIdOnAuth);
+        Assertions.assertJsonByName(responseCheckAuth, "user_id", this.userIdOnAuth);
     }
 
     @ParameterizedTest
@@ -72,5 +70,16 @@ public class UserAuthTest extends BaseTestCase {
 
         Response responceForCheck = spec.get().andReturn();
         Assertions.assertJsonByName(responceForCheck, "user_id", 0);
+    }
+
+    @Test
+    public void testIncorrectUserId() {
+        Response response = apiCoreRequests.makeGetRequests(
+                "https://playground.learnqa.ru/api/user/1",
+                this.header,
+                this.cookie
+        );
+
+        Assertions.assertJsonByName(response, "username", "Lana");
     }
 }
