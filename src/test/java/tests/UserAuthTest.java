@@ -13,6 +13,10 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.HashMap;
 import java.util.Map;
 
+import static lib.Assertions.assertResponseCodeEquals;
+import static lib.Assertions.assertResponseTextEquals;
+import static lib.DataGenerator.getRegistrationData;
+
 
 public class UserAuthTest extends BaseTestCase {
 
