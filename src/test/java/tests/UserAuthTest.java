@@ -81,5 +81,6 @@ public class UserAuthTest extends BaseTestCase {
         );
 
         Assertions.assertJsonByName(response, "username", "Lana");
+        Assertions.assertCountOfBodyElements(response,1);
     }
 }

@@ -2,7 +2,6 @@ package lib;
 
 import io.restassured.response.Response;
 
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasKey;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -35,6 +34,14 @@ public class Assertions {
                 ExpectedStatusCode,
                 Response.statusCode(),
                 "Responce code is unexpected " + Response.statusCode()
+        );
+    }
+
+    public static void assertCountOfBodyElements(Response response, int CountElements) {
+        assertEquals(
+                response.jsonPath().getMap("$").values().size(),
+                CountElements,
+                "Number of elements in json is incorrect: "+ response.jsonPath().getMap("$").values().size()
         );
     }
 
