@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
-import static lib.DataGenerator.getRegistrationData;
 
 public class ApiCoreRequests {
 
@@ -106,4 +105,14 @@ public class ApiCoreRequests {
                 .andReturn();
 
     }
+
+    @Step("Delete request")
+    public Response deleteUser (String url, String header, String cookie) {
+        return given()
+                .header("x-csrf-token", header)
+                .cookie("auth_sid", cookie)
+                .delete(url)
+                .andReturn();
+    }
+
 }
