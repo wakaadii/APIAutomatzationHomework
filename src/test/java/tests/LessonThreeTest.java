@@ -2,6 +2,8 @@ package tests;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import lib.BaseTestCase;
+import lib.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -10,7 +12,10 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class LessonThreeTest {
+public class LessonThreeTest extends BaseTestCase {
+
+    String baseUrl = BaseTestCase.baseUrl();
+
 
     public String[] UserAgentParameters() {
 
@@ -39,25 +44,26 @@ public class LessonThreeTest {
 
     @Test
     public void checkCookie() {
-        Response responce = RestAssured
-                .get("https://playground.learnqa.ru/api/homework_cookie")
+        Response response = RestAssured
+                .get(baseUrl+"homework_cookie")
                 .andReturn();
 
-        String responceCookie = responce.getCookie("HomeWork");
+        Assertions.assertResponseCodeEquals(response, 200);
+        String responseCookie = response.getCookie("HomeWork");
 
-
-        assertEquals("hw_value", responceCookie, "cookie value is unexpected: " + responceCookie);
+        assertEquals("hw_value", responseCookie, "cookie value is unexpected: " + responseCookie);
     }
 
     @Test
     public void checkHeader() {
-        Response Responce = RestAssured
-                .get("https://playground.learnqa.ru/api/homework_header")
+        Response response = RestAssured
+                .get(baseUrl+"homework_header")
                 .andReturn();
 
-        String responceHeader = Responce.getHeader("x-secret-homework-header");
+        Assertions.assertResponseCodeEquals(response, 200);
+        String responseHeader = response.getHeader("x-secret-homework-header");
 
-        assertEquals("Some secret value", responceHeader, "header value is unexpected: " + responceHeader);
+        assertEquals("Some secret value", responseHeader, "header value is unexpected: " + responseHeader);
     }
 
     @ParameterizedTest
@@ -66,19 +72,20 @@ public class LessonThreeTest {
         Response response = RestAssured
                 .given()
                 .header("User-Agent", UserAgentParameters()[number])
-                .get("https://playground.learnqa.ru/ajax/api/user_agent_check")
+                .get(baseUrl+"user_agent_check")
                 .andReturn();
 
 
+        Assertions.assertResponseCodeEquals(response, 200);
         String device = response.jsonPath().getString("device");
         String browser = response.jsonPath().getString("browser");
         String platform = response.jsonPath().getString("platform");
 
-/*        System.out.println("\n" + device + " " + responceParameters()[number][0]);
-        System.out.println(browser + " " + responceParameters()[number][1]);
-        System.out.println(platform + " " + responceParameters()[number][2]);
+//        System.out.println("\n" + device + " " + responceParameters()[number][0]);
+//        System.out.println(browser + " " + responceParameters()[number][1]);
+//        System.out.println(platform + " " + responceParameters()[number][2]);
 
- */
+
 
         assertEquals(responceParameters()[number][0], device, "unexpected parameter 'device' in case " + (number+1));
         assertEquals(responceParameters()[number][1], browser, "unexpected parameter 'browser' in case " + (number+1));

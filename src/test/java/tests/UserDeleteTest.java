@@ -17,6 +17,8 @@ public class UserDeleteTest extends BaseTestCase {
     String header;
     int userIdOnAuth;
     public final ApiCoreRequests apiCoreRequests = new ApiCoreRequests();
+    String baseUrl = BaseTestCase.baseUrl();
+
     @BeforeEach
     public void loginUser() {
         Map<String,String> authData = new HashMap<>();
@@ -26,7 +28,7 @@ public class UserDeleteTest extends BaseTestCase {
         Response responseGetAuth = RestAssured
                 .given()
                 .body(authData)
-                .post("https://playground.learnqa.ru/api/user/login")
+                .post(baseUrl+"user/login")
                 .andReturn();
 
         this.cookie = this.getCookie(responseGetAuth, "auth_sid");
@@ -39,7 +41,7 @@ public class UserDeleteTest extends BaseTestCase {
         Response auth = apiCoreRequests.authToUserId2();
 
         Response deleteUser = apiCoreRequests.deleteUser(
-                "https://playground.learnqa.ru/api/user/2",
+                baseUrl+"user/2",
                 this.getHeader(auth,"x-csrf-token"),
                 this.getCookie(auth, "auth_sid"));
 
@@ -55,13 +57,13 @@ public class UserDeleteTest extends BaseTestCase {
 
         //auth
         Response auth = apiCoreRequests.makePostRequest(
-                "https://playground.learnqa.ru/api/user/login",
+                baseUrl+"user/login",
                 userData
         );
 
         //delete
         Response deleteUser = apiCoreRequests.deleteUser(
-                "https://playground.learnqa.ru/api/user/"+ userId,
+                baseUrl+"user/"+ userId,
                 this.getHeader(auth,"x-csrf-token"),
                 this.getCookie(auth,"auth_sid"));
 
@@ -77,13 +79,13 @@ public class UserDeleteTest extends BaseTestCase {
 
         //auth
         Response auth = apiCoreRequests.makePostRequest(
-                "https://playground.learnqa.ru/api/user/login",
+                baseUrl+"user/login",
                 userData
         );
 
         //delete
         Response deleteUser = apiCoreRequests.deleteUser(
-                "https://playground.learnqa.ru/api/user/1"+ userId,
+                baseUrl+"user/1"+ userId,
                 this.getHeader(auth,"x-csrf-token"),
                 this.getCookie(auth,"auth_sid"));
 

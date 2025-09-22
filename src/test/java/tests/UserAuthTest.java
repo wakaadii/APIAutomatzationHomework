@@ -21,6 +21,7 @@ public class UserAuthTest extends BaseTestCase {
     String header;
     int userIdOnAuth;
     public final ApiCoreRequests apiCoreRequests = new ApiCoreRequests();
+    String baseUrl = BaseTestCase.baseUrl();
 
     @BeforeEach
     public void loginUser() {
@@ -31,7 +32,7 @@ public class UserAuthTest extends BaseTestCase {
         Response responseGetAuth = RestAssured
                 .given()
                 .body(authData)
-                .post("https://playground.learnqa.ru/api/user/login")
+                .post(baseUrl+"user/login")
                 .andReturn();
 
         this.cookie = this.getCookie(responseGetAuth, "auth_sid");
@@ -46,7 +47,7 @@ public class UserAuthTest extends BaseTestCase {
                 .given()
                 .header("x-csrf-token", this.header)
                 .cookie("auth_sid", this.cookie)
-                .get("https://playground.learnqa.ru/api/user/auth")
+                .get(baseUrl+"user/auth")
                 .andReturn();
 
         Assertions.assertJsonByName(responseCheckAuth, "user_id", this.userIdOnAuth);
@@ -57,7 +58,7 @@ public class UserAuthTest extends BaseTestCase {
     public void testNegativeAith(String condition) throws IllegalAccessException {
 
         RequestSpecification spec = RestAssured.given();
-        spec.baseUri("https://playground.learnqa.ru/api/user/auth");
+        spec.baseUri(baseUrl+"user/auth");
 
 
         if (condition.equals("cookie")) {
@@ -75,7 +76,7 @@ public class UserAuthTest extends BaseTestCase {
     @Test
     public void testIncorrectUserId() {
         Response response = apiCoreRequests.makeGetRequests(
-                "https://playground.learnqa.ru/api/user/1",
+                baseUrl+"user/1",
                 this.header,
                 this.cookie
         );

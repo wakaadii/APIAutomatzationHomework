@@ -21,6 +21,7 @@ public class UserChangeProfileTest extends BaseTestCase {
     String header;
     int userIdOnAuth;
     public final ApiCoreRequests apiCoreRequests = new ApiCoreRequests();
+    String baseUrl = BaseTestCase.baseUrl();
     @BeforeEach
     public void loginUser() {
         Map<String,String> authData = new HashMap<>();
@@ -30,7 +31,7 @@ public class UserChangeProfileTest extends BaseTestCase {
         Response responseGetAuth = RestAssured
                 .given()
                 .body(authData)
-                .post("https://playground.learnqa.ru/api/user/login")
+                .post(baseUrl+"user/login")
                 .andReturn();
 
         this.cookie = this.getCookie(responseGetAuth, "auth_sid");
@@ -46,7 +47,7 @@ public class UserChangeProfileTest extends BaseTestCase {
         String userID = apiCoreRequests.createNewUser(userData);
 
         Response changeProfile = apiCoreRequests.changeProfileData(
-                "https://playground.learnqa.ru/api/user/"+ userID,
+                baseUrl+"user/"+ userID,
                 "username",
                 "aez");
 
@@ -65,17 +66,15 @@ public class UserChangeProfileTest extends BaseTestCase {
         authData.put("email", userData.get("email"));
         authData.put("password", userData.get("password"));
 
-
-
         //auth
         Response auth = apiCoreRequests.makePostRequest(
-                "https://playground.learnqa.ru/api/user/login",
+                baseUrl+"user/login",
                 authData
         );
 
         //change
         Response changeProfile = apiCoreRequests.changeProfileData(
-                "https://playground.learnqa.ru/api/user/"+ userID + "1",
+                baseUrl+"user/"+ userID + "1",
                 this.getHeader(auth,"x-csrf-token"),
                 this.getCookie(auth,"auth_sid"),
                 "username",
@@ -100,7 +99,7 @@ public class UserChangeProfileTest extends BaseTestCase {
 
         //auth
         Response auth = apiCoreRequests.makePostRequest(
-                "https://playground.learnqa.ru/api/user/login",
+                baseUrl+"user/login",
                 authData
         );
 
@@ -108,7 +107,7 @@ public class UserChangeProfileTest extends BaseTestCase {
 
         if (param.equals("email")) {
             Response changeProfile = apiCoreRequests.changeProfileData(
-                    "https://playground.learnqa.ru/api/user/"+ userID,
+                    baseUrl+"user/"+ userID,
                     this.getHeader(auth,"x-csrf-token"),
                     this.getCookie(auth,"auth_sid"),
                     "email",
@@ -118,7 +117,7 @@ public class UserChangeProfileTest extends BaseTestCase {
             Assertions.assertJsonByName(changeProfile, "error", "Invalid email format");
         } else if (param.equals("first name")) {
             Response changeProfile = apiCoreRequests.changeProfileData(
-                    "https://playground.learnqa.ru/api/user/"+ userID,
+                    baseUrl+"user/"+ userID,
                     this.getHeader(auth,"x-csrf-token"),
                     this.getCookie(auth,"auth_sid"),
                     "firstName",

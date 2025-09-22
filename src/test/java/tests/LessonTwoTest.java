@@ -1,22 +1,32 @@
 package tests;
 
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import lib.ApiCoreRequests;
+import lib.Assertions;
+import lib.BaseTestCase;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-public class LessonTwoTest {
+public class LessonTwoTest extends BaseTestCase{
+
+    String baseUrl = BaseTestCase.baseUrl();
+    public final ApiCoreRequests apiCoreRequests = new ApiCoreRequests();
 
     @Test
     public void testGetTextSecondMessage() {
-        JsonPath response = RestAssured
+        Response response = RestAssured
                 .given()
-                .get("https://playground.learnqa.ru/api/get_json_homework")
-                .jsonPath();
+                .contentType(ContentType.JSON)
+                .get(baseUrl + "get_json_homework")
+                .andReturn();
 
-        List<Object> messages = response.get("messages");
+        Assertions.assertResponseCodeEquals(response, 200);
+
+        List<java.util.Map<String, Object>> messages = response.jsonPath().getList("messages");
         Object answer = messages.get(1);
         System.out.println(answer);
 
@@ -28,7 +38,7 @@ public class LessonTwoTest {
                 .given()
                 .redirects()
                 .follow(false)
-                .get("https://playground.learnqa.ru/api/long_redirect")
+                .get(baseUrl+"long_redirect")
                 .andReturn();
 
 
@@ -41,10 +51,19 @@ public class LessonTwoTest {
 
         int statusCode = 0;
         int countRedirects = 0;
-        String redirectLink = "https://playground.learnqa.ru/api/long_redirect";
+        String redirectLink = baseUrl+"long_redirect";
+
+        Response response = RestAssured
+                .get(redirectLink)
+                .andReturn();
+
+
+        Assertions.assertResponseCodeEquals(response, 200);
 
         while (statusCode != 200) {
-            Response response = RestAssured
+
+            System.out.println(response.statusCode());
+            response = RestAssured
                     .given()
                     .redirects()
                     .follow(false)
@@ -59,17 +78,23 @@ public class LessonTwoTest {
 
     @Test
     public void testDelay() throws InterruptedException {
-        JsonPath response = RestAssured
-                .given()
-                .get("https://playground.learnqa.ru/ajax/api/longtime_job")
-                .jsonPath();
 
-        int delay = response.get("seconds");
-        String token = response.get("token");
+        Response response = RestAssured
+                .given()
+                .get(baseUrl+"longtime_job")
+                .andReturn();
+
+        Assertions.assertResponseCodeEquals(
+                response,
+                200);
+
+        int delay = apiCoreRequests.getIntFromJson(response,"seconds");
+        String token = apiCoreRequests.getStringFromJson(response,"token");
+
         JsonPath beforeTimer = RestAssured
                 .given()
                 .queryParam("token", token)
-                .get("https://playground.learnqa.ru/ajax/api/longtime_job")
+                .get(baseUrl+"longtime_job")
                 .jsonPath();
 
         String responceCode = beforeTimer.get("status");
@@ -85,7 +110,7 @@ public class LessonTwoTest {
         JsonPath afterTimer = RestAssured
                 .given()
                 .queryParam("token", token)
-                .get("https://playground.learnqa.ru/ajax/api/longtime_job")
+                .get(baseUrl+"longtime_job")
                 .jsonPath();
 
         responceCode = afterTimer.get("status");
@@ -113,8 +138,10 @@ public class LessonTwoTest {
                     .given()
                     .queryParam("login", "super_admin")
                     .queryParam("password", passwordsArray[i])
-                    .post("https://playground.learnqa.ru/ajax/api/get_secret_password_homework")
+                    .post(baseUrl+"get_secret_password_homework")
                     .andReturn();
+
+            Assertions.assertResponseCodeEquals(response, 200);
 
             String authCookie = response.getCookie("auth_cookie");
 
@@ -122,7 +149,7 @@ public class LessonTwoTest {
                     .given()
                     .cookies("auth_cookie", authCookie)
                     .when()
-                    .post("https://playground.learnqa.ru/ajax/api/check_auth_cookie")
+                    .post(baseUrl+"check_auth_cookie")
                     .andReturn();
 
             if (responseWithCookie.getBody().asString().equals("You are authorized")) {

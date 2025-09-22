@@ -20,6 +20,7 @@ public class UserRegisterTest extends BaseTestCase {
 
 
     public final ApiCoreRequests apiCoreRequests = new ApiCoreRequests();
+    String baseUrl = BaseTestCase.baseUrl();
 
     @Test
     public void testCreateUserWithIncorrectEmail() {
@@ -30,7 +31,7 @@ public class UserRegisterTest extends BaseTestCase {
         userData = getRegistrationData(userData);
 
         Response response = apiCoreRequests.makePostRequest(
-                "https://playground.learnqa.ru/api/user/",
+                baseUrl+"user/",
                 userData
         );
 
@@ -44,7 +45,7 @@ public class UserRegisterTest extends BaseTestCase {
         Map<String, String> userData = getRegistrationDataWithoutParameter(param);
 
         Response response = apiCoreRequests.makePostRequest(
-                "https://playground.learnqa.ru/api/user/",
+                baseUrl+"user/",
                 userData
         );
 
@@ -70,7 +71,7 @@ public class UserRegisterTest extends BaseTestCase {
         userData = getRegistrationData(userData);
 
         Response response = apiCoreRequests.makePostRequest(
-                "https://playground.learnqa.ru/api/user/",
+                baseUrl+"user/",
                 userData
         );
 

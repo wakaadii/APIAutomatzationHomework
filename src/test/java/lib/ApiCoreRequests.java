@@ -11,8 +11,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.hasKey;
 
-public class ApiCoreRequests {
+public class ApiCoreRequests extends BaseTestCase{
+
+    String baseUrl = BaseTestCase.baseUrl();
 
     @Step("Create new user")
     public String createNewUser(Map<String,String> userData) {
@@ -21,7 +24,7 @@ public class ApiCoreRequests {
                 .given()
                 .filter(new AllureRestAssured())
                 .body(userData)
-                .post("https://playground.learnqa.ru/api/user/")
+                .post(baseUrl+"user/")
                 .jsonPath();
 
         return response.getString("id");
@@ -33,40 +36,15 @@ public class ApiCoreRequests {
         authData.put("email", "vinkotov@example.com");
         authData.put("password", "1234");
 
-        return  makePostRequest("https://playground.learnqa.ru/api/user/login", authData);
+        return  makePostRequest(baseUrl+"user/login", authData);
     }
 
-    @Step("\"Get\" without token and cookie")
-    public Response makeGetRequests(String url) {
-        return given()
-                .filter(new AllureRestAssured())
-                .get(url)
-                .andReturn();
-    }
     @Step("\"Get\" with token and cookie")
     public Response makeGetRequests(String url, String token, String cookie) {
         return given()
                 .filter(new AllureRestAssured())
                 .header(new Header("x-csrf-token", token))
                 .cookie("auth_sid", cookie)
-                .get(url)
-                .andReturn();
-    }
-
-    @Step("\"Get\" with cookie")
-    public Response makeGetRequestsWithCookie (String url, String cookie) {
-        return given()
-                .filter(new AllureRestAssured())
-                .cookie("auth_sid", cookie)
-                .get(url)
-                .andReturn();
-    }
-
-    @Step("\"Get\" with token")
-    public Response makeGetRequestsWithToken (String url, String token) {
-        return given()
-                .filter(new AllureRestAssured())
-                .header(new Header("x-csrf-token", token))
                 .get(url)
                 .andReturn();
     }
@@ -113,6 +91,16 @@ public class ApiCoreRequests {
                 .cookie("auth_sid", cookie)
                 .delete(url)
                 .andReturn();
+    }
+
+    public int getIntFromJson(Response Responce, String name) {
+        Responce.then().assertThat().body("$", hasKey(name));
+        return Responce.jsonPath().getInt(name);
+    }
+
+    public String getStringFromJson(Response Responce, String name) {
+        Responce.then().assertThat().body("$", hasKey(name));
+        return Responce.jsonPath().getString(name);
     }
 
 }
