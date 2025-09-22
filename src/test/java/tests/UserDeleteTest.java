@@ -1,5 +1,6 @@
 package tests;
 
+import io.qameta.allure.Feature;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import lib.ApiCoreRequests;
@@ -37,6 +38,8 @@ public class UserDeleteTest extends BaseTestCase {
     }
 
     @Test
+    @Feature("Delete profile")
+    @Feature("Negative")
     public void DeleteUserId2 () {
         Response auth = apiCoreRequests.authToUserId2();
 
@@ -49,6 +52,7 @@ public class UserDeleteTest extends BaseTestCase {
     }
 
     @Test
+    @Feature("Delete profile")
     public void deleteNewUser() {
 
         //create
@@ -71,6 +75,8 @@ public class UserDeleteTest extends BaseTestCase {
     }
 
     @Test
+    @Feature("Delete profile")
+    @Feature("Negative")
     public void deleteAnotherUser() {
 
         //create

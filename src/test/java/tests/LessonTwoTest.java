@@ -1,5 +1,7 @@
 package tests;
 
+import io.qameta.allure.Feature;
+import io.qameta.allure.Step;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
@@ -33,6 +35,7 @@ public class LessonTwoTest extends BaseTestCase{
     }
 
     @Test
+    @Feature("Redirect")
     public void testRedirectAddress() {
         Response response = RestAssured
                 .given()
@@ -47,6 +50,7 @@ public class LessonTwoTest extends BaseTestCase{
     }
 
     @Test
+    @Feature("Redirect")
     public void testCountRedirects() {
 
         int statusCode = 0;
@@ -77,6 +81,7 @@ public class LessonTwoTest extends BaseTestCase{
     }
 
     @Test
+    @Feature("Delay")
     public void testDelay() throws InterruptedException {
 
         Response response = RestAssured
@@ -128,6 +133,7 @@ public class LessonTwoTest extends BaseTestCase{
     }
 
     @Test
+    @Feature("Authorization")
     public void testPasswordBrutforce () {
         String passwords = "111111\tqazwsx\tpassword\tloveme\t123456\twelcome\taccess\t1234\tpassword1\tflower\tiloveyou\tadobe123\t1234567\t1q2w3e4r\t123456789\taa123456\tqwerty\t555555\tpassw0rd\t000000\twhatever\t123123\tninja\t1234567\tmonkey\tadmin\tlovely\thottie\tsolo\tfootball\tFootball\tmichael\t12345\tshadow\tsunshine\tmustang\tdragon\t1234567890\t654321\tbailey\tprincess\t2345678\tjesus\tbaseball\thello\tzaq1zaq1\tletmein\tlogin\tfreedom\t!@#$%^&*\t696969\t666666\tcharlie\tdonald\tmonkey\tabc123\t12345678\tstarwars\tsuperman\t888888\tqwerty123\tazerty\t1qaz2wsx\t121212\tphotoshop\tashley\tqwertyuiop\t7777777\tbatman\tmaster\ttrustno1\t123qwe";
         String[] passwordsArray = passwords.split("\t");

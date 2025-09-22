@@ -1,5 +1,6 @@
 package tests;
 
+import io.qameta.allure.Feature;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -41,6 +42,7 @@ public class UserAuthTest extends BaseTestCase {
     }
 
     @Test
+    @Feature("Authorization")
     public void testAuthUser (){
 
         Response responseCheckAuth = RestAssured
@@ -55,6 +57,7 @@ public class UserAuthTest extends BaseTestCase {
 
     @ParameterizedTest
     @ValueSource(strings =  {"cookie", "header"})
+    @Feature("Authorization")
     public void testNegativeAith(String condition) throws IllegalAccessException {
 
         RequestSpecification spec = RestAssured.given();
@@ -74,6 +77,7 @@ public class UserAuthTest extends BaseTestCase {
     }
 
     @Test
+    @Feature("Authorization")
     public void testIncorrectUserId() {
         Response response = apiCoreRequests.makeGetRequests(
                 baseUrl+"user/1",

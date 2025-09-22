@@ -1,6 +1,7 @@
 package tests;
 
 
+import io.qameta.allure.Feature;
 import io.restassured.response.Response;
 import lib.ApiCoreRequests;
 import lib.BaseTestCase;
@@ -23,6 +24,8 @@ public class UserRegisterTest extends BaseTestCase {
     String baseUrl = BaseTestCase.baseUrl();
 
     @Test
+    @Feature("Create profile")
+    @Feature("Negative")
     public void testCreateUserWithIncorrectEmail() {
         String email = "vinkotovexample.com";
 
@@ -41,6 +44,8 @@ public class UserRegisterTest extends BaseTestCase {
 
     @ParameterizedTest
     @ValueSource(strings = {"email", "password", "username", "firstName", "lastName"})
+    @Feature("Create profile")
+    @Feature("Negative")
     public void testCreateUserWithoutFields (String param) {
         Map<String, String> userData = getRegistrationDataWithoutParameter(param);
 
@@ -54,6 +59,8 @@ public class UserRegisterTest extends BaseTestCase {
     }
     @ParameterizedTest
     @ValueSource(strings =  {"a", "Aa1_Bb2-Cc3+Dd4=Ee5|Ff6@Gg7#Hh8$Ii9%Jj0^Kk1&Ll2*Mm3(Nn4)Oo5{Qq6}Rr7[Ss8]Tt9~Uu0`Vv1!Ww2?Xx3.Yy4,Zz5;Aa6_Bb7-Cc8+Dd9=Ee0|Ff1@Gg2#Hh3$Ii4%Jj5^Kk6&Ll7*Mm8(Nn9)Oo0{Qq1}Rr2[Ss3]Tt4~Uu5`Vv6!Ww7?Xx8.Yy9,Zz0Aa1_Bb2-Cc3+Dd4=Ee5|Ff6@Gg7#Hh8$Ii9%Jj0^Kk1&Ll2*Mm3(Nn4)Oo5{Qq6}Rr7[Ss8]Tt9~Uu0`Vv1!Ww2?Xx3.Yy4,Zz5;Aa6_Bb7-Cc8+Dd9=Ee0|Ff1@Gg2#Hh3$Ii4%Jj5^Kk6&Ll7*Mm8(Nn9)Oo0{Qq1}Rr2[Ss3]Tt4~Uu5`Vv6!Ww7?Xx8.Yy9,Zz0"})
+    @Feature("Create profile")
+    @Feature("Negative")
     public void testCreateUserWithSomeNames(String name) {
 
         String error;

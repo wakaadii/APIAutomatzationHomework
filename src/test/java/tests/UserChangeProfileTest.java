@@ -1,5 +1,6 @@
 package tests;
 
+import io.qameta.allure.Feature;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import lib.ApiCoreRequests;
@@ -41,6 +42,7 @@ public class UserChangeProfileTest extends BaseTestCase {
 
 
     @Test
+    @Feature("Change profile")
     public void unauthorizedChangeProfileTest() {
 
         Map<String, String> userData = getRegistrationData();
@@ -56,6 +58,8 @@ public class UserChangeProfileTest extends BaseTestCase {
     }
 
     @Test
+    @Feature("Change profile")
+    @Feature("Negative")
     public void anotherAuthorizedUserChangeProfileTest() {
 
         //create
@@ -86,6 +90,8 @@ public class UserChangeProfileTest extends BaseTestCase {
 
     @ParameterizedTest
     @ValueSource(strings = {"email", "first name"})
+    @Feature("Change profile")
+    @Feature("Negative")
     public void ChangeEmailToIncorrectTest(String param) {
         //create
         Map<String, String> userData = getRegistrationData();

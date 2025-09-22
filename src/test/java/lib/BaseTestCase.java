@@ -1,5 +1,6 @@
 package lib;
 
+import io.qameta.allure.Description;
 import io.restassured.response.Response;
 import io.restassured.http.Headers;
 
@@ -10,10 +11,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BaseTestCase {
 
+    @Description("здесь устанавливается базовый адрес, на который будут идти запросы")
     protected static String baseUrl() {
         return "https://playground.learnqa.ru/api_dev/";
         //return "https://playground.learnqa.ru/api/";
     }
+    @Description("Get header from response with filled name")
     protected String getHeader(Response Response, String name) {
         Headers headers = Response.getHeaders();
 
@@ -21,6 +24,7 @@ public class BaseTestCase {
         return headers.getValue(name);
     }
 
+    @Description("Get cookie from response with filled name")
     protected String getCookie(Response Responce, String name) {
         Map<String, String> cookies = Responce.getCookies();
 
@@ -28,8 +32,9 @@ public class BaseTestCase {
         return cookies.get(name);
     }
 
-    protected int getIntFromJson(Response Responce, String name) {
-        Responce.then().assertThat().body("$", hasKey(name));
-        return Responce.jsonPath().getInt(name);
+    @Description("Get int-parameter from response with filled name")
+    protected int getIntFromJson(Response Response, String name) {
+        Response.then().assertThat().body("$", hasKey(name));
+        return Response.jsonPath().getInt(name);
     }
 }

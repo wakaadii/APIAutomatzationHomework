@@ -1,5 +1,7 @@
 package lib;
 
+import io.qameta.allure.Step;
+
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +13,7 @@ public class DataGenerator {
         return ("learnqa" + timestamp + "@example.com");
     }
 
+    @Step("Default user's creator ")
     public static Map<String,String> getRegistrationData() {
         Map<String, String> registrationData = new HashMap<>();
         registrationData.put("email", DataGenerator.getRandomEmail());
@@ -21,6 +24,8 @@ public class DataGenerator {
 
         return registrationData;
     }
+
+    @Step("User's creator with some filled parameters")
     public static Map<String,String> getRegistrationData(Map<String, String> nonDefaultValues){
         Map<String, String> defaultValues = DataGenerator.getRegistrationData();
         Map<String, String> userData = new HashMap<>();
@@ -35,6 +40,7 @@ public class DataGenerator {
         return userData;
     }
 
+    @Step("Fill default parameters")
     public static Map<String,String> getRegistrationDataWithoutParameter(String excludeValue) {
         Map<String, String> registrationData = new HashMap<>();
         registrationData.put("email", DataGenerator.getRandomEmail());

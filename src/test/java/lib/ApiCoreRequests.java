@@ -93,11 +93,13 @@ public class ApiCoreRequests extends BaseTestCase{
                 .andReturn();
     }
 
-    public int getIntFromJson(Response Responce, String name) {
-        Responce.then().assertThat().body("$", hasKey(name));
-        return Responce.jsonPath().getInt(name);
+    @Step("get int from json")
+    public int getIntFromJson(Response Response, String name) {
+        Response.then().assertThat().body("$", hasKey(name));
+        return Response.jsonPath().getInt(name);
     }
 
+    @Step("get string from json")
     public String getStringFromJson(Response Responce, String name) {
         Responce.then().assertThat().body("$", hasKey(name));
         return Responce.jsonPath().getString(name);

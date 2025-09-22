@@ -1,5 +1,6 @@
 package tests;
 
+import io.qameta.allure.Feature;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import lib.BaseTestCase;
@@ -43,6 +44,7 @@ public class LessonThreeTest extends BaseTestCase {
     }
 
     @Test
+    @Feature("Headers")
     public void checkCookie() {
         Response response = RestAssured
                 .get(baseUrl+"homework_cookie")
@@ -55,6 +57,7 @@ public class LessonThreeTest extends BaseTestCase {
     }
 
     @Test
+    @Feature("Headers")
     public void checkHeader() {
         Response response = RestAssured
                 .get(baseUrl+"homework_header")
@@ -68,6 +71,7 @@ public class LessonThreeTest extends BaseTestCase {
 
     @ParameterizedTest
     @ValueSource(ints = {0, 1, 2, 3, 4})
+    @Feature("body")
     public void checkUserAgent(int number) {
         Response response = RestAssured
                 .given()
@@ -80,12 +84,6 @@ public class LessonThreeTest extends BaseTestCase {
         String device = response.jsonPath().getString("device");
         String browser = response.jsonPath().getString("browser");
         String platform = response.jsonPath().getString("platform");
-
-//        System.out.println("\n" + device + " " + responceParameters()[number][0]);
-//        System.out.println(browser + " " + responceParameters()[number][1]);
-//        System.out.println(platform + " " + responceParameters()[number][2]);
-
-
 
         assertEquals(responceParameters()[number][0], device, "unexpected parameter 'device' in case " + (number+1));
         assertEquals(responceParameters()[number][1], browser, "unexpected parameter 'browser' in case " + (number+1));
